@@ -49,8 +49,4 @@ function addLeadingZeros(value: number | string, length: number = 2): string {
   return "0".repeat(length - value.length) + value;
 }
 
-export const utils = {
-  sanitizeString,
-  addLeadingZeros,
-  generateRandomString,
-};
+export { addLeadingZeros, generateRandomString, sanitizeString };

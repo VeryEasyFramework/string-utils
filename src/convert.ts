@@ -1,4 +1,4 @@
-import { utils } from "./utils.ts";
+import { sanitizeString } from "./utils.ts";
 
 /**
  * Converts a string from camel case to snake case
@@ -13,7 +13,7 @@ function camelToSnakeCase(inputString: string): string {
   inputString = inputString.trim().replace(/[^a-zA-Z0-9_]/g, "_");
   // substitute capital letters with underscore and lowercase
   inputString = inputString.replace(/(?<!^)(?=[A-Z])/g, "_").toLowerCase();
-  return utils.sanitizeString(inputString);
+  return sanitizeString(inputString);
 }
 
 /**
@@ -26,7 +26,7 @@ function camelToSnakeCase(inputString: string): string {
  * @returns {string} camel case string
  */
 function toCamelCase(inputString: string): string {
-  inputString = utils.sanitizeString(inputString);
+  inputString = sanitizeString(inputString);
   // split the string into words
   const words = inputString.split("_");
   // if there is only one word, return the input string
@@ -49,7 +49,7 @@ function toCamelCase(inputString: string): string {
  * @returns {string} pascal case string
  */
 function toPascalCase(inputString: string): string {
-  inputString = utils.sanitizeString(inputString);
+  inputString = sanitizeString(inputString);
   // split the string into words
   const words = inputString.split("_");
   // capitalize the first letter of each word
@@ -68,7 +68,7 @@ function toPascalCase(inputString: string): string {
  * @returns {string} snake case string
  */
 function toSnakeCase(inputString: string): string {
-  return utils.sanitizeString(inputString);
+  return sanitizeString(inputString);
 }
 
 /**
@@ -76,7 +76,7 @@ function toSnakeCase(inputString: string): string {
  * @param {string} inputString
  */
 function toTitleCase(inputString: string): string {
-  inputString = utils.sanitizeString(inputString);
+  inputString = sanitizeString(inputString);
   inputString = inputString.replace("_", " ");
   return inputString.split(" ").map((word) =>
     word.charAt(0).toUpperCase() + word.slice(1)
@@ -91,9 +91,10 @@ function camelToTitleCase(inputString: string): string {
   return toTitleCase(camelToSnakeCase(inputString));
 }
 
-export const convert = {
-  camelToTitleCase,
+/** */
+export {
   camelToSnakeCase,
+  camelToTitleCase,
   toCamelCase,
   toPascalCase,
   toSnakeCase,
