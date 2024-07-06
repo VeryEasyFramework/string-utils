@@ -1,1 +1,3 @@
-# string-formatter
+# String Formatter
+
+## Description
