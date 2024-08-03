@@ -1,5 +1,11 @@
 {
-  "name": "@eveffer/string-utils",
+  "name": "@vef/string-utils",
   "version": "0.1.2",
-  "exports": "./mod.ts"
+  "exports": "./mod.ts",
+  "publish": {
+    "exclude": [
+      ".github",
+      ".vscode"
+    ]
+  }
 }
