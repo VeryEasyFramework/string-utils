@@ -9,13 +9,13 @@ A collection of small utilities to help with converting and generating strings
 1. Add the package to your project:
 
 ```bash
-deno add @eveffer/string-utils
+deno add @vef/string-utils
 ```
 
 2. Import a utility and use it:
 
 ```typescript
-import { toSnakeCase } from "@eveffer/string-utils";
+import { toSnakeCase } from "@vef/string-utils";
 
 const snakeCaseString = toSnakeCase("HelloWorld");
 console.log(snakeCaseString); // hello_world
