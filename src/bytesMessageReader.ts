@@ -1,5 +1,3 @@
-import { colorMe } from "https://jsr.io/@vef/color-me/1.0.3/src/colorMe.ts";
-
 export const controlChars = {
   NUL: 0x00,
   SOH: 0x01,
@@ -174,14 +172,14 @@ export class BytesMessageReader {
             result += `[${char}]`;
             continue;
           }
-          result += colorMe.brightRed(`[${char}]`);
+          result += `[${char}]`;
           continue;
         }
       }
       const char = getControlChar(byte);
       if (!char && !this.isAsciiPrintable(byte)) {
         const hex = this.convertToHex(new Uint8Array([byte]));
-        result += colorMe.brightCyan(hex);
+        result += hex;
         continue;
       }
 
