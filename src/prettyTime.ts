@@ -1,4 +1,4 @@
-export function prettyDuration(time: number) {
+export function prettyDuration(time: number): string {
   // convert milliseconds to pretty time
 
   let output = "";

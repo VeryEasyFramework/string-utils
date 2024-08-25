@@ -83,7 +83,7 @@ export class BytesMessageReader {
   data: Uint8Array = new Uint8Array();
   readableStream: ReadableStream<Uint8Array>;
 
-  decoder = new TextDecoder();
+  decoder: TextDecoder = new TextDecoder();
 
   constructor(readableStream: ReadableStream<Uint8Array>) {
     this.offset = 0;
@@ -91,7 +91,7 @@ export class BytesMessageReader {
     this.readableStream = readableStream;
     this.buffer = new Uint8Array(this.size);
   }
-  onOutput(callback: (data: Uint8Array) => void) {
+  onOutput(callback: (data: Uint8Array) => void): void {
     const stdStream = new WritableStream<Uint8Array>({
       write(chunk) {
         callback(new Uint8Array(chunk));
@@ -106,29 +106,29 @@ export class BytesMessageReader {
     return this.readableStream.getReader().closed;
   }
 
-  readUntil(controlChar: ControlChar) {
+  readUntil(controlChar: ControlChar): string {
     const index = this.data.indexOf(controlChars[controlChar], this.offset);
     const result = this.data.slice(this.offset, index);
     this.offset = index + 1;
     return this.decode(result);
   }
-  readAll() {
+  readAll(): string {
     const result = this.data.slice(this.offset);
     this.offset = this.data.length;
     return this.decode(result);
   }
 
-  readByte() {
+  readByte(): number {
     const byte = this.data[this.offset];
     this.offset++;
     return byte;
   }
-  readBytes(count: number) {
+  readBytes(count: number): Uint8Array {
     const slice = this.data.slice(this.offset, this.offset + count);
     this.offset += count;
     return slice;
   }
-  readUntilNewLine() {
+  readUntilNewLine(): string {
     const data: number[] = [];
     while (true) {
       // check for \r\n
@@ -157,10 +157,10 @@ export class BytesMessageReader {
     this.offset = index + 1;
     return this.decode(result);
   }
-  isAsciiPrintable(byte: number) {
+  isAsciiPrintable(byte: number): boolean {
     return byte >= 32 && byte <= 126;
   }
-  readChars(count: number, replaceControlChars?: boolean) {
+  readChars(count: number, replaceControlChars?: boolean): string {
     const slice = this.data.slice(this.offset, this.offset + count);
     let result = "";
     for (let i = 0; i < slice.length; i++) {
@@ -189,7 +189,7 @@ export class BytesMessageReader {
     return result;
   }
 
-  convertToHex(data: Uint8Array) {
+  convertToHex(data: Uint8Array): string {
     let result = "";
     for (let i = 0; i < data.length; i++) {
       const byte = data[i];
@@ -200,7 +200,7 @@ export class BytesMessageReader {
     return result;
   }
 
-  readInt32() {
+  readInt32(): number {
     const num = new DataView(this.data.buffer).getInt32(
       this.offset,
       false,
@@ -208,11 +208,11 @@ export class BytesMessageReader {
     this.offset += 4;
     return num;
   }
-  decode(data: Uint8Array) {
+  decode(data: Uint8Array): string {
     return this.decoder.decode(data);
   }
 
-  readUntilNull() {
+  readUntilNull(): string {
     let byte = this.data[this.offset];
     const data: number[] = [];
     while (true) {

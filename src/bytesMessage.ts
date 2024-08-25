@@ -5,7 +5,7 @@ export class BytesMessage {
   offset: number;
   size: number;
 
-  encoder = new TextEncoder();
+  encoder: TextEncoder = new TextEncoder();
 
   constructor() {
     this.size = 1024;
@@ -22,11 +22,11 @@ export class BytesMessage {
     dst.set(src, off);
     return src.byteLength;
   }
-  encode(data: string) {
+  encode(data: string): Uint8Array {
     return this.encoder.encode(data);
   }
 
-  ensure(size: number) {
+  ensure(size: number): void {
     const remaining = this.buffer.length - this.offset;
     if (remaining < size) {
       const oldBuffer = this.buffer;
@@ -38,7 +38,7 @@ export class BytesMessage {
     }
   }
 
-  addCString(string?: string) {
+  addCString(string?: string): BytesMessage {
     // just write a 0 for empty or null strings
     if (!string) {
       this.ensure(1);
@@ -52,7 +52,7 @@ export class BytesMessage {
     this.buffer[this.offset++] = 0; // null terminator
     return this;
   }
-  addString(string: string) {
+  addString(string: string): BytesMessage {
     const encodedStr = this.encode(string);
     this.ensure(encodedStr.byteLength);
     this.copy(encodedStr, this.buffer, this.offset);
@@ -61,22 +61,22 @@ export class BytesMessage {
     return this;
   }
 
-  addControlChar(char: ControlChar) {
+  addControlChar(char: ControlChar): BytesMessage {
     this.ensure(1);
     this.buffer[this.offset++] = controlChars[char];
     return this;
   }
-  addBoolean(value: boolean) {
+  addBoolean(value: boolean): BytesMessage {
     this.ensure(1);
     this.buffer[this.offset++] = value ? 1 : 0;
     return this;
   }
 
-  addInt(num: number) {
+  addInt(num: number): BytesMessage {
     return this.addInt32(num);
   }
 
-  addInt32(num: number) {
+  addInt32(num: number): BytesMessage {
     this.ensure(4);
     this.buffer[this.offset++] = (num >>> 24) & 0xff;
     this.buffer[this.offset++] = (num >>> 16) & 0xff;
@@ -85,14 +85,14 @@ export class BytesMessage {
     return this;
   }
 
-  addInt16(num: number) {
+  addInt16(num: number): BytesMessage {
     this.ensure(2);
     this.buffer[this.offset++] = (num >>> 8) & 0xff;
     this.buffer[this.offset++] = (num >>> 0) & 0xff;
     return this;
   }
 
-  addNegativeOne() {
+  addNegativeOne(): BytesMessage {
     this.ensure(4);
     this.buffer[this.offset++] = 255;
     this.buffer[this.offset++] = 255;
@@ -100,25 +100,25 @@ export class BytesMessage {
     this.buffer[this.offset++] = 255;
     return this;
   }
-  addByte(num: number) {
+  addByte(num: number): BytesMessage {
     this.ensure(1);
     this.buffer[this.offset++] = num;
     return this;
   }
-  addBytes(data: Uint8Array) {
+  addBytes(data: Uint8Array): BytesMessage {
     this.ensure(data.byteLength);
     this.copy(data, this.buffer, this.offset);
     this.offset += data.byteLength;
     return this;
   }
 
-  addNUL() {
+  addNUL(): BytesMessage {
     this.ensure(1);
     this.buffer[this.offset++] = 0;
     return this;
   }
 
-  get content() {
+  get content(): Uint8Array {
     const data = this.buffer.slice(0, this.offset);
     this.reset();
     return data;
